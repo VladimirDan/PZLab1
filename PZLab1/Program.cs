@@ -59,8 +59,8 @@ namespace PZLab1
             this.solution = "Equation is: (" + a.ToString("F1") + ") x ^ 2 + (" 
                 + b.ToString("F1") + ") x + ("
                 + c.ToString("F1") + ") \n";
+
             double d = b * b - 4 * a * c;
-            Console.WriteLine(d);
 
             if(d < 0)
             {
@@ -98,36 +98,33 @@ namespace PZLab1
 
             Console.Write("a = ");
             aString = Console.ReadLine();
-            while (!Double.TryParse(aString, out a))
+
+            while (!Double.TryParse(aString, out a) || a == 0)
             {
-                Console.WriteLine("");
                 Console.WriteLine("Error. Expected a valid real number, got " + aString + " instead");
                 Console.Write("a = ");
                 aString = Console.ReadLine();
             }
-            Console.WriteLine("");
 
             Console.Write("b = ");
             bString = Console.ReadLine();
+
             while (!Double.TryParse(bString, out b))
             {
-                Console.WriteLine("");
                 Console.WriteLine("Error. Expected a valid real number, got " + bString + " instead");
                 Console.Write("b = ");
                 bString = Console.ReadLine();
             }
-            Console.WriteLine("");
 
             Console.Write("c = ");
             cString = Console.ReadLine();
+
             while (!Double.TryParse(cString, out c))
             {
-                Console.WriteLine("");
                 Console.WriteLine("Error. Expected a valid real number, got " + cString + " instead");
                 Console.Write("c = ");
                 cString = Console.ReadLine();
             }
-            Console.WriteLine("");
 
             this.multipliers = new EquationMultipliers(a, b, c);
         }
@@ -151,7 +148,8 @@ namespace PZLab1
 
             if (!fileInfo.Exists)
             {
-                throw new FileNotFoundException("The file was not found.", path);
+                Console.WriteLine("File " + path + " does not exist");
+                throw new FileNotFoundException("file does not exist", path);
             }
 
             string inputString = File.ReadAllText(path);
@@ -193,8 +191,14 @@ namespace PZLab1
 
             if(!Double.TryParse(aString, out a) || !Double.TryParse(bString, out b) || !Double.TryParse(cString, out c))
             {
-                Console.WriteLine("Error");
-                return 1;
+                Console.WriteLine("Invalid file format");
+                throw new ArgumentException("Invalid file format.");
+            }
+
+            if(a == 0)
+            {
+                Console.WriteLine("Error. a cannot be 0");
+                throw new ArgumentException("Error. a cannot be 0.");
             }
 
             this.multipliers = new EquationMultipliers(a, b, c);
