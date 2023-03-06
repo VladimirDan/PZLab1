@@ -6,7 +6,21 @@ namespace PZLab1
     {
         static void Main(string[] args)
         {
-            
+            string mode;
+
+            Console.WriteLine("Enter '1' for console input, or '2' for file input");
+            mode = Console.ReadLine();
+            while (mode != "1" && mode != "2")
+            {
+                Console.WriteLine("Enter '1' for console input, or '2' for file input");
+                mode = Console.ReadLine();
+            }
+            if(mode == "1")
+            {
+                ConsolMultipliersInputSolving consolMultipliersInputSolving = new ConsolMultipliersInputSolving();
+                consolMultipliersInputSolving.MultipliersInput();
+                consolMultipliersInputSolving.equationSolving();
+            }
         }
     }
 
@@ -17,9 +31,9 @@ namespace PZLab1
             this.multipliers = equationMultipliers;
         }
 
-        protected string solution;
+        private string solution;
 
-        protected EquationMultipliers multipliers;
+        private EquationMultipliers multipliers;
         public void printSolution()
         {
             Console.WriteLine(this.solution);
@@ -35,6 +49,7 @@ namespace PZLab1
                 + b.ToString("F1") + ") x + ("
                 + c.ToString("F1") + ") \n";
             double d = b * b - 4 * a * c;
+            Console.WriteLine(d);
 
             if(d < 0)
             {
@@ -58,13 +73,69 @@ namespace PZLab1
 
     }
 
+    class ConsolMultipliersInputSolving
+    {
+        private EquationMultipliers multipliers;
+        public void MultipliersInput()
+        {
+            double a;
+            string aString;
+            double b;
+            string bString;
+            double c;
+            string cString;
+
+            Console.Write("a = ");
+            aString = Console.ReadLine();
+            while (!Double.TryParse(aString, out a))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error. Expected a valid real number, got " + aString + " instead");
+                Console.Write("a = ");
+                aString = Console.ReadLine();
+            }
+            Console.WriteLine("");
+
+            Console.Write("b = ");
+            bString = Console.ReadLine();
+            while (!Double.TryParse(bString, out b))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error. Expected a valid real number, got " + bString + " instead");
+                Console.Write("b = ");
+                bString = Console.ReadLine();
+            }
+            Console.WriteLine("");
+
+            Console.Write("c = ");
+            cString = Console.ReadLine();
+            while (!Double.TryParse(cString, out c))
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Error. Expected a valid real number, got " + cString + " instead");
+                Console.Write("c = ");
+                cString = Console.ReadLine();
+            }
+            Console.WriteLine("");
+
+            this.multipliers = new EquationMultipliers(a, b, c);
+        }
+
+        public void equationSolving()
+        {
+            QuadraticEquation quadraticEquation = new QuadraticEquation(multipliers);
+            quadraticEquation.findSolution();
+            quadraticEquation.printSolution();
+        }
+    }
+
     struct EquationMultipliers
     {
         public double a;
         public double b;
         public double c;
 
-        public EquationMultipliers(int _a, int _b, int _c)
+        public EquationMultipliers(double _a, double _b, double _c)
         {
             this.a = _a;
             this.b = _b;
