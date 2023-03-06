@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace PZLab1
 {
@@ -20,6 +21,16 @@ namespace PZLab1
                 ConsolMultipliersInputSolving consolMultipliersInputSolving = new ConsolMultipliersInputSolving();
                 consolMultipliersInputSolving.MultipliersInput();
                 consolMultipliersInputSolving.equationSolving();
+            }
+            if(mode == "2")
+            {
+                string path;
+                Console.WriteLine("Enter a path to file");
+                path = Console.ReadLine();
+
+                FileMultipliersInputSolving fileMultipliersInputSolving = new FileMultipliersInputSolving();
+                fileMultipliersInputSolving.MultipliersInput(path);
+                fileMultipliersInputSolving.equationSolving();
             }
         }
     }
@@ -121,6 +132,75 @@ namespace PZLab1
             this.multipliers = new EquationMultipliers(a, b, c);
         }
 
+        public void equationSolving()
+        {
+            QuadraticEquation quadraticEquation = new QuadraticEquation(multipliers);
+            quadraticEquation.findSolution();
+            quadraticEquation.printSolution();
+        }
+    }
+
+    class FileMultipliersInputSolving
+    {
+        private EquationMultipliers multipliers;
+
+        public int MultipliersInput(string path)
+        {
+            //path = @"C:\Users\user\source\repos\PZLab1\mults.txt";
+            FileInfo fileInfo = new FileInfo(path);
+
+            if (!fileInfo.Exists)
+            {
+                throw new FileNotFoundException("The file was not found.", path);
+            }
+
+            string inputString = File.ReadAllText(path);
+
+            double a;
+            string aString = "";
+            double b;
+            string bString = "";
+            double c;
+            string cString = "";
+
+            int i = 0;
+            while(i < 100)
+            {
+                aString += inputString[i];
+                if(inputString[i++] == ' ')
+                {
+                    break;
+                }
+            }
+
+            while (i < 100)
+            {
+                bString += inputString[i];
+                if (inputString[i++] == ' ')
+                {
+                    break;
+                }
+            }
+
+            while (i < 100)
+            {
+                cString += inputString[i];
+                if (inputString[i++] == '\n')
+                {
+                    break;
+                }
+            }
+
+            if(!Double.TryParse(aString, out a) || !Double.TryParse(bString, out b) || !Double.TryParse(cString, out c))
+            {
+                Console.WriteLine("Error");
+                return 1;
+            }
+
+            this.multipliers = new EquationMultipliers(a, b, c);
+
+            return 0;
+        }
         public void equationSolving()
         {
             QuadraticEquation quadraticEquation = new QuadraticEquation(multipliers);
